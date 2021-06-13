@@ -67,7 +67,10 @@ int main()
 	std::unordered_set<int> s2;
 	s2.reserve(10);
 
-	std::bitset<8> s3;
+	std::unordered_multiset<int> s3;
+	s3.reserve(10);
+
+	std::bitset<8> s4;
 
 	std::deque<int> dq1;
 

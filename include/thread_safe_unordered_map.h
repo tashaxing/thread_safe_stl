@@ -68,7 +68,7 @@ namespace thread_safe {
 
         void clear(void) { std::lock_guard<std::mutex> lock(mutex); storage.clear(); }
 
-        //Observers
+        // Observers
         key_compare key_comp(void) const { std::lock_guard<std::mutex> lock(mutex); return storage.key_comp(); }
         value_compare value_comp(void) const { std::lock_guard<std::mutex> lock(mutex); return storage.value_comp(); }
 
@@ -138,6 +138,8 @@ namespace thread_safe {
         size_type max_size(void) const { std::lock_guard<std::mutex> lock(mutex); return storage.max_size(); }
 
         bool empty(void) const { std::lock_guard<std::mutex> lock(mutex); return storage.empty(); }
+
+        void reserve(size_type n) { std::lock_guard<std::mutex> lock(mutex); storage.reserve(n); }
 
         // Modifiers
         std::pair<iterator, bool> insert(const value_type& x) { std::lock_guard<std::mutex> lock(mutex); return storage.insert(x); }
