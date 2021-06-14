@@ -1,3 +1,9 @@
+/*
+Thread Safe Version STL in C++11
+Copyright(c) 2021
+Author: tashaxing
+*/
+
 #ifndef THREAD_SAFE_BITSET_H_INCLUDED
 #define THREAD_SAFE_BITSET_H_INCLUDED
 

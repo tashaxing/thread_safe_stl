@@ -1,3 +1,8 @@
+/*
+Thread Safe Version STL in C++11
+Copyright(c) 2021
+Author: tashaxing
+*/
 #ifndef THREAD_SAFE_MAP_H_INCLUDED
 #define THREAD_SAFE_MAP_H_INCLUDED
 

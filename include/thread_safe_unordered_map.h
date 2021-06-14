@@ -1,3 +1,8 @@
+/*
+Thread Safe Version STL in C++11
+Copyright(c) 2021
+Author: tashaxing
+*/
 #ifndef THREAD_SAFE_UNORDERED_MAP_H_INCLUDED
 #define THREAD_SAFE_UNORDERED_MAP_H_INCLUDED
 
@@ -6,26 +11,22 @@
 
 namespace thread_safe {
 
-    template < class Key, class T, class Compare = std::less<Key>, class Allocator = std::allocator<std::pair<const Key, T> > >
+    template <class Key, class T>
     class unordered_map {
     public:
-        typedef typename std::unordered_map<Key, T, Compare, Allocator>::iterator iterator;
-        typedef typename std::unordered_map<Key, T, Compare, Allocator>::const_iterator const_iterator;
-        typedef typename std::unordered_map<Key, T, Compare, Allocator>::reverse_iterator reverse_iterator;
-        typedef typename std::unordered_map<Key, T, Compare, Allocator>::const_reverse_iterator const_reverse_iterator;
-        typedef typename std::unordered_map<Key, T, Compare, Allocator>::allocator_type allocator_type;
-        typedef typename std::unordered_map<Key, T, Compare, Allocator>::size_type size_type;
-        typedef typename std::unordered_map<Key, T, Compare, Allocator>::key_compare key_compare;
-        typedef typename std::unordered_map<Key, T, Compare, Allocator>::value_compare value_compare;
-        typedef typename std::unordered_map<Key, T, Compare, Allocator>::value_type value_type;
+        typedef typename std::unordered_map<Key, T>::iterator iterator;
+        typedef typename std::unordered_map<Key, T>::const_iterator const_iterator;
+        typedef typename std::unordered_map<Key, T>::allocator_type allocator_type;
+        typedef typename std::unordered_map<Key, T>::size_type size_type;
+        typedef typename std::unordered_map<Key, T>::value_type value_type;
 
         // Constructors
-        explicit unordered_map(const Compare& comp = Compare(), const Allocator& alloc = Allocator()) : storage(comp, alloc) { }
-        template <class InputIterator> unordered_map(InputIterator first, InputIterator last, const Compare& comp = Compare(), const Allocator& alloc = Allocator()) : storage(first, last, comp, alloc) { }
-        unordered_map(const thread_safe::unordered_map<Key, T, Compare, Allocator>& x) : storage(x.storage) { }
+        unordered_map() = default;
+        template <class InputIterator> unordered_map(InputIterator first, InputIterator last) : storage(first, last) { }
+        unordered_map(const thread_safe::unordered_map<Key, T>& x) : storage(x.storage) { }
 
         // Copy
-        thread_safe::unordered_map<Key, Compare, Allocator>& operator=(const thread_safe::unordered_map<Key, Compare, Allocator>& x) { std::lock_guard<std::mutex> lock(mutex); std::lock_guard<std::mutex> lock2(x.mutex); storage = x.storage; return *this; }
+        thread_safe::unordered_map<Key, T>& operator=(const thread_safe::unordered_map<Key, T>& x) { std::lock_guard<std::mutex> lock(mutex); std::lock_guard<std::mutex> lock2(x.mutex); storage = x.storage; return *this; }
 
         // Destructor
         ~unordered_map(void) { }
@@ -36,12 +37,6 @@ namespace thread_safe {
 
         iterator end(void) { std::lock_guard<std::mutex> lock(mutex); return storage.end(); }
         const_iterator end(void) const { std::lock_guard<std::mutex> lock(mutex); return storage.end(); }
-
-        reverse_iterator rbegin(void) { std::lock_guard<std::mutex> lock(mutex); return storage.rbegin(); }
-        const_reverse_iterator rbegin(void) const { std::lock_guard<std::mutex> lock(mutex); return storage.rbegin(); }
-
-        reverse_iterator rend(void) { std::lock_guard<std::mutex> lock(mutex); return storage.rend(); }
-        const_reverse_iterator rend(void) const { std::lock_guard<std::mutex> lock(mutex); return storage.rend(); }
 
         // Capacity
         size_type size(void) const { std::lock_guard<std::mutex> lock(mutex); return storage.size(); }
@@ -64,13 +59,9 @@ namespace thread_safe {
         size_type erase(const Key& x) { std::lock_guard<std::mutex> lock(mutex); return storage.erase(x); }
         void erase(iterator begin, iterator end) { std::lock_guard<std::mutex> lock(mutex); storage.erase(begin, end); }
 
-        void swap(thread_safe::unordered_map<Key, T, Compare, Allocator>& x) { std::lock_guard<std::mutex> lock(mutex); std::lock_guard<std::mutex> lock2(x.mutex); storage.swap(x.storage); }
+        void swap(thread_safe::unordered_map<Key, T>& x) { std::lock_guard<std::mutex> lock(mutex); std::lock_guard<std::mutex> lock2(x.mutex); storage.swap(x.storage); }
 
         void clear(void) { std::lock_guard<std::mutex> lock(mutex); storage.clear(); }
-
-        // Observers
-        key_compare key_comp(void) const { std::lock_guard<std::mutex> lock(mutex); return storage.key_comp(); }
-        value_compare value_comp(void) const { std::lock_guard<std::mutex> lock(mutex); return storage.value_comp(); }
 
         // Operations
         const_iterator find(const Key& x) const { std::lock_guard<std::mutex> lock(mutex); return storage.find(x); }
@@ -91,30 +82,26 @@ namespace thread_safe {
         allocator_type get_allocator(void) const { std::lock_guard<std::mutex> lock(mutex); return storage.get_allocator(); }
 
     private:
-        std::unordered_map<Key, T, Compare, Allocator> storage;
+        std::unordered_map<Key, T> storage;
         mutable std::mutex mutex;
     };
 
-    template < class Key, class T, class Compare = std::less<Key>, class Allocator = std::allocator<std::pair<const Key, T> > >
+    template < class Key, class T >
     class unordered_multimap {
     public:
-        typedef typename std::unordered_multimap<Key, T, Compare, Allocator>::iterator iterator;
-        typedef typename std::unordered_multimap<Key, T, Compare, Allocator>::const_iterator const_iterator;
-        typedef typename std::unordered_multimap<Key, T, Compare, Allocator>::reverse_iterator reverse_iterator;
-        typedef typename std::unordered_multimap<Key, T, Compare, Allocator>::const_reverse_iterator const_reverse_iterator;
-        typedef typename std::unordered_multimap<Key, T, Compare, Allocator>::allocator_type allocator_type;
-        typedef typename std::unordered_multimap<Key, T, Compare, Allocator>::size_type size_type;
-        typedef typename std::unordered_multimap<Key, T, Compare, Allocator>::key_compare key_compare;
-        typedef typename std::unordered_multimap<Key, T, Compare, Allocator>::value_compare value_compare;
-        typedef typename std::unordered_multimap<Key, T, Compare, Allocator>::value_type value_type;
+        typedef typename std::unordered_multimap<Key, T>::iterator iterator;
+        typedef typename std::unordered_multimap<Key, T>::const_iterator const_iterator;
+        typedef typename std::unordered_multimap<Key, T>::allocator_type allocator_type;
+        typedef typename std::unordered_multimap<Key, T>::size_type size_type;
+        typedef typename std::unordered_multimap<Key, T>::value_type value_type;
 
         // Constructors
-        explicit unordered_multimap(const Compare& comp = Compare(), const Allocator& alloc = Allocator()) : storage(comp, alloc) { }
-        template <class InputIterator> unordered_multimap(InputIterator first, InputIterator last, const Compare& comp = Compare(), const Allocator& alloc = Allocator()) : storage(first, last, comp, alloc) { }
-        unordered_multimap(const thread_safe::unordered_multimap<Key, T, Compare, Allocator>& x) : storage(x.storage) { }
+        unordered_multimap() = default;
+        template <class InputIterator> unordered_multimap(InputIterator first, InputIterator last) : storage(first, last) { }
+        unordered_multimap(const thread_safe::unordered_multimap<Key, T>& x) : storage(x.storage) { }
 
         // Copy
-        thread_safe::unordered_multimap<Key, Compare, Allocator>& operator=(const thread_safe::unordered_multimap<Key, Compare, Allocator>& x) { std::lock_guard<std::mutex> lock(mutex); std::lock_guard<std::mutex> lock2(x.mutex); storage = x.storage; return *this; }
+        thread_safe::unordered_multimap<Key, T>& operator=(const thread_safe::unordered_multimap<Key, T>& x) { std::lock_guard<std::mutex> lock(mutex); std::lock_guard<std::mutex> lock2(x.mutex); storage = x.storage; return *this; }
 
         // Destructor
         ~unordered_multimap(void) { }
@@ -125,12 +112,6 @@ namespace thread_safe {
 
         iterator end(void) { std::lock_guard<std::mutex> lock(mutex); return storage.end(); }
         const_iterator end(void) const { std::lock_guard<std::mutex> lock(mutex); return storage.end(); }
-
-        reverse_iterator rbegin(void) { std::lock_guard<std::mutex> lock(mutex); return storage.rbegin(); }
-        const_reverse_iterator rbegin(void) const { std::lock_guard<std::mutex> lock(mutex); return storage.rbegin(); }
-
-        reverse_iterator rend(void) { std::lock_guard<std::mutex> lock(mutex); return storage.rend(); }
-        const_reverse_iterator rend(void) const { std::lock_guard<std::mutex> lock(mutex); return storage.rend(); }
 
         // Capacity
         size_type size(void) const { std::lock_guard<std::mutex> lock(mutex); return storage.size(); }
@@ -150,13 +131,9 @@ namespace thread_safe {
         size_type erase(const Key& x) { std::lock_guard<std::mutex> lock(mutex); return storage.erase(x); }
         void erase(iterator begin, iterator end) { std::lock_guard<std::mutex> lock(mutex); storage.erase(begin, end); }
 
-        void swap(thread_safe::unordered_multimap<Key, T, Compare, Allocator>& x) { std::lock_guard<std::mutex> lock(mutex); std::lock_guard<std::mutex> lock2(x.mutex); storage.swap(x.storage); }
+        void swap(thread_safe::unordered_multimap<Key, T>& x) { std::lock_guard<std::mutex> lock(mutex); std::lock_guard<std::mutex> lock2(x.mutex); storage.swap(x.storage); }
 
         void clear(void) { std::lock_guard<std::mutex> lock(mutex); storage.clear(); }
-
-        // Observers
-        key_compare key_comp(void) const { std::lock_guard<std::mutex> lock(mutex); return storage.key_comp(); }
-        value_compare value_comp(void) const { std::lock_guard<std::mutex> lock(mutex); return storage.value_comp(); }
 
         // Operations
         const_iterator find(const Key& x) const { std::lock_guard<std::mutex> lock(mutex); return storage.find(x); }
@@ -177,11 +154,9 @@ namespace thread_safe {
         allocator_type get_allocator(void) const { std::lock_guard<std::mutex> lock(mutex); return storage.get_allocator(); }
 
     private:
-        std::unordered_multimap<Key, T, Compare, Allocator> storage;
+        std::unordered_multimap<Key, T> storage;
         mutable std::mutex mutex;
     };
-
-
 }
 
 #endif // THREAD_SAFE_UNORDERED_MAP_H_INCLUDED
