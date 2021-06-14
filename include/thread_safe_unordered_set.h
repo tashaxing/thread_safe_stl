@@ -21,7 +21,7 @@ namespace thread_safe {
 
         // Constructors
         unordered_set() = default;
-        template <class InputIterator> unordered_set(InputIterator first, InputIterator last) : storage(first, last, comp) { }
+        template <class InputIterator> unordered_set(InputIterator first, InputIterator last) : storage(first, last) { }
         unordered_set(const thread_safe::unordered_set<Key>& x) : storage(x.storage) { }
 
         // Copy

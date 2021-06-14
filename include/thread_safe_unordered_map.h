@@ -49,6 +49,8 @@ namespace thread_safe {
 
         // Element Access
         T& operator[](const Key& x) { std::lock_guard<std::mutex> lock(mutex); return storage[x]; }
+        T& at(const Key& x) { std::lock_guard<std::mutex> lock(mutex); return storage.at(x); };
+        const T& at(const Key& x) const { std::lock_guard<std::mutex> lock(mutex); return storage.at(x); };
 
         // Modifiers
         std::pair<iterator, bool> insert(const value_type& x) { std::lock_guard<std::mutex> lock(mutex); return storage.insert(x); }

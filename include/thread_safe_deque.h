@@ -42,6 +42,9 @@ public:
     iterator end( void ) { std::lock_guard<std::mutex> lock( mutex ); return storage.end(); }
     const_iterator end( void ) const { std::lock_guard<std::mutex> lock( mutex ); return storage.end(); }
 
+    const_iterator cbegin() const { std::lock_guard<std::mutex> lock(mutex); return storage.cbegin(); }
+    const_iterator cend() const { std::lock_guard<std::mutex> lock(mutex); return storage.cend(); }
+
     reverse_iterator rbegin( void ) { std::lock_guard<std::mutex> lock( mutex ); return storage.rbegin(); }
     const_reverse_iterator rbegin( void ) const { std::lock_guard<std::mutex> lock( mutex ); return storage.rbegin(); }
 
