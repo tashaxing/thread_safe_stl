@@ -62,6 +62,7 @@ int main()
 	//	std::cout << e << std::endl;
 
 	std::list<int> l1;
+	thread_safe::list<int> t_l1;
 
 	std::map<int, std::string> m1;
 	
