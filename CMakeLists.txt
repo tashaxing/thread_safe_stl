@@ -15,3 +15,9 @@ file(GLOB SRC
     benchmark.cpp
 )
 add_executable(benchmark ${SRC})
+
+if (UNIX)
+    target_link_libraries(benchmark
+        pthread
+    )
+endif()

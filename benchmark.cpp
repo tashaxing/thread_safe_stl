@@ -318,7 +318,7 @@ void perf_test()
 	std::cout << "thread safe priority_queue perf task cost time: " << t2 - t1 << " ns" << " , current thread: " << std::this_thread::get_id() << std::endl;
 }
 
-#define TEST_MULTI_THREAD
+//#define TEST_MULTI_THREAD
 
 int main()
 {
@@ -333,9 +333,10 @@ int main()
 		t = std::thread(perf_test);
 		t.detach();
 	}
-#endif // !TEST_MULTI_THREAD
 
-	system("pause");
+	getchar(); // wait here
+
+#endif // !TEST_MULTI_THREAD
 
 	return 0;
 }
