@@ -6,12 +6,12 @@ Author: tashaxing
 #ifndef THREAD_SAFE_STACK_H_INCLUDED
 #define THREAD_SAFE_STACK_H_INCLUDED
 
-#include <deque>
+#include <stack>
 #include <mutex>
 
 namespace thread_safe {
 
-template < class T, class Container = std::deque<T> >
+template < class T, class Container = std::stack<T> >
 class stack {
 public:
     explicit stack( const Container & ctnr = Container() ) : storage( ctnr ) { }
@@ -19,12 +19,12 @@ public:
 
     size_t size( void ) const { std::lock_guard<std::mutex> lock( mutex ); return storage.size(); }
 
-    T & top( void ) { std::lock_guard<std::mutex> lock( mutex ); return storage.back(); }
-    const T & top( void ) const { std::lock_guard<std::mutex> lock( mutex ); return storage.back(); }
+    T & top( void ) { std::lock_guard<std::mutex> lock( mutex ); return storage.top(); }
+    const T & top( void ) const { std::lock_guard<std::mutex> lock( mutex ); return storage.top(); }
 
-    void push( const T & u ) { std::lock_guard<std::mutex> lock( mutex ); storage.push_back( u ); }
+    void push( const T & u ) { std::lock_guard<std::mutex> lock( mutex ); storage.push( u ); }
 
-    void pop( void ) { std::lock_guard<std::mutex> lock( mutex ); storage.pop_back(); }
+    void pop( void ) { std::lock_guard<std::mutex> lock( mutex ); storage.pop(); }
 private:
     Container storage;
     mutable std::mutex mutex;

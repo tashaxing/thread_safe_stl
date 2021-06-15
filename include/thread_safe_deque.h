@@ -77,9 +77,13 @@ public:
     void assign( size_type n, T & u ) { std::lock_guard<std::mutex> lock( mutex ); storage.assign( n, u ); }
     template <class InputIterator> void assign( InputIterator begin, InputIterator end ) { std::lock_guard<std::mutex> lock( mutex ); storage.assign( begin, end ); }
 
+    void emplace_back(const T& u) { std::lock_guard<std::mutex> lock(mutex); storage.emplace_back(u); }
+
     void push_back( const T & u ) { std::lock_guard<std::mutex> lock( mutex ); storage.push_back( u ); }
 
     void pop_back( void ) { std::lock_guard<std::mutex> lock( mutex ); storage.pop_back(); }
+
+    void emplace_front(const T& u) { std::lock_guard<std::mutex> lock(mutex); storage.emplace_front(u); }
 
     void push_front( const T & u ) { std::lock_guard<std::mutex> lock( mutex ); storage.push_front( u ); }
 

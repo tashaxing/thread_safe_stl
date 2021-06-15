@@ -45,10 +45,9 @@ public:
 
     size_t size( void ) const { std::lock_guard<std::mutex> lock( mutex ); return storage.size(); }
 
-    T & top( void ) { std::lock_guard<std::mutex> lock( mutex ); return storage.top(); }
     const T & top( void ) const { std::lock_guard<std::mutex> lock( mutex ); return storage.top(); }
 
-    void push( const T & u ) { std::lock_guard<std::mutex> lock( mutex ); storage.push(); }
+    void push( const T & u ) { std::lock_guard<std::mutex> lock( mutex ); storage.push(u); }
 
     void pop( void ) { std::lock_guard<std::mutex> lock( mutex ); storage.pop(); }
 private:
