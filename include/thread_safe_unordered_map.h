@@ -47,6 +47,8 @@ namespace thread_safe {
 
         void reserve(size_type n) { std::lock_guard<std::mutex> lock(mutex); storage.reserve(n); }
 
+        void rehash(size_type n) { std::lock_guard<std::mutex> lock(mutex); storage.rehash(n); }
+
         // Element Access
         T& operator[](const Key& x) { std::lock_guard<std::mutex> lock(mutex); return storage[x]; }
         T& at(const Key& x) { std::lock_guard<std::mutex> lock(mutex); return storage.at(x); };

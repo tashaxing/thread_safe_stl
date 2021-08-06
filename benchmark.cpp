@@ -143,6 +143,7 @@ void perf_test()
 	t1 = NowNanoTimestamp();
 	std::unordered_map<int, std::string> ump;
 	ump.reserve(kCap);
+	ump.rehash(kCap);
 	for (int i = 0; i < kNum; i++)
 	{
 		ump.insert(std::make_pair(i, "value"));
@@ -158,6 +159,7 @@ void perf_test()
 	t1 = NowNanoTimestamp();
 	thread_safe::unordered_map<int, std::string> tump;
 	tump.reserve(kCap);
+	tump.rehash(kCap);
 	for (int i = 0; i < kNum; i++)
 	{
 		tump.insert(std::make_pair(i, "value"));
@@ -205,6 +207,7 @@ void perf_test()
 	t1 = NowNanoTimestamp();
 	std::unordered_set<int> ust;
 	ust.reserve(kCap);
+	ust.rehash(kCap);
 	for (int i = 0; i < kNum; i++)
 	{
 		ust.insert(i);
@@ -220,6 +223,7 @@ void perf_test()
 	t1 = NowNanoTimestamp();
 	thread_safe::unordered_set<int> tust;
 	tust.reserve(kCap);
+	tust.rehash(kCap);
 	for (int i = 0; i < kNum; i++)
 	{
 		tust.insert(i);
@@ -318,7 +322,7 @@ void perf_test()
 	std::cout << "thread safe priority_queue perf task cost time: " << t2 - t1 << " ns" << " , current thread: " << std::this_thread::get_id() << std::endl;
 }
 
-//#define TEST_MULTI_THREAD
+#define TEST_MULTI_THREAD
 
 int main()
 {

@@ -46,6 +46,8 @@ namespace thread_safe {
 
         void reserve(size_type n) { std::lock_guard<std::mutex> lock(mutex); storage.reserve(n); }
 
+        void rehash(size_type n) { std::lock_guard<std::mutex> lock(mutex); storage.rehash(n); }
+
         // Modifiers
         std::pair<iterator, bool> insert(const Key& x) { std::lock_guard<std::mutex> lock(mutex); return storage.insert(x); }
         iterator insert(iterator position, const Key& x) { std::lock_guard<std::mutex> lock(mutex); return storage.insert(position, x); }
